@@ -62,6 +62,9 @@ defmodule DeltaSharing.MixProject do
         Profile: [
           DeltaSharing.Profile
         ]
+      ],
+      nest_modules_by_prefix: [
+        DeltaSharing.Response
       ]
     ]
   end
