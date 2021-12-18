@@ -1,6 +1,7 @@
 defmodule DeltaSharing.MixProject do
   use Mix.Project
 
+  @source_url "https://github.com/instadeq/elixir-delta-sharing-client"
   @version "0.1.0"
 
   def project do
@@ -11,7 +12,8 @@ defmodule DeltaSharing.MixProject do
       package: package(),
       elixir: "~> 1.12",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      docs: docs()
     ]
   end
 
@@ -30,7 +32,7 @@ defmodule DeltaSharing.MixProject do
     [
       maintainers: ["Mariano Guerra"],
       licenses: ["MIT"],
-      links: %{"GitHub" => "https://github.com/instadeq/elixir-delta-sharing-client"}
+      links: %{"GitHub" => @source_url}
     ]
   end
 
@@ -41,6 +43,24 @@ defmodule DeltaSharing.MixProject do
       {:castore, "~> 0.1.14"},
       {:jason, "~> 1.2"},
       {:tesla, "~> 1.4"}
+    ]
+  end
+
+  defp docs do
+    [
+      main: "readme",
+      source_url: @source_url,
+      source_ref: "v#{@version}",
+      extras: ["README.md", "LICENSE"],
+      groups_for_modules: [
+        Clients: [
+          DeltaSharing.Client,
+          DeltaSharing.RawClient
+        ],
+        Profile: [
+          DeltaSharing.Profile
+        ]
+      ]
     ]
   end
 end
