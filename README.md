@@ -1,6 +1,6 @@
 # DeltaSharing
 
-Elixir client library for the [Delta Sharing Protocol](https://github.com/delta-io/delta-sharing/blob/main/PROTOCOL.md)
+Elixir client library for the [Delta Sharing Protocol](https://github.com/delta-io/delta-sharing/blob/main/PROTOCOL.md) by the [instadeq](https://instadeq.com) team
 
 ## Status
 
