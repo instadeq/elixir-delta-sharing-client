@@ -1,10 +1,14 @@
 defmodule DeltaSharing.MixProject do
   use Mix.Project
 
+  @version "0.1.0"
+
   def project do
     [
       app: :delta_sharing,
-      version: "0.1.0",
+      version: @version,
+      description: description(),
+      package: package(),
       elixir: "~> 1.12",
       start_permanent: Mix.env() == :prod,
       deps: deps()
@@ -18,6 +22,18 @@ defmodule DeltaSharing.MixProject do
     ]
   end
 
+  defp description do
+    "Elixir Client for the Delta Sharing Protocol"
+  end
+
+  defp package do
+    [
+      maintainers: ["Mariano Guerra"],
+      licenses: ["MIT"],
+      links: %{"GitHub" => "https://github.com/instadeq/elixir-delta-sharing-client"}
+    ]
+  end
+
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
@@ -25,8 +41,6 @@ defmodule DeltaSharing.MixProject do
       {:castore, "~> 0.1.14"},
       {:jason, "~> 1.2"},
       {:tesla, "~> 1.4"}
-      # {:dep_from_hexpm, "~> 0.3.0"},
-      # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
     ]
   end
 end
