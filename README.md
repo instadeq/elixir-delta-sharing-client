@@ -47,17 +47,11 @@ Client.query_table(c, "delta_sharing", "default", "COVID_19_NYT", 10)
 
 ## Installation
 
-```elixir
-def deps do
-  [
-    {:delta_sharing, "~> 0.1.0"}
-  ]
-end
-```
+Follow Instructions on [hex.pm/packages/delta_sharing/](https://hex.pm/packages/delta_sharing/)
 
 ## Docs
 
-[hexdocs.pm/delta_sharing](https://hexdocs.pm/delta_sharing)
+[delta_sharing docs on Hex Docs](https://hexdocs.pm/delta_sharing)
 
 ## License
 
