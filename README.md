@@ -31,10 +31,6 @@ RawClient.query_table_version(c, "delta_sharing", "default", "COVID_19_NYT")
 RawClient.query_table_metadata(c, "delta_sharing", "default", "COVID_19_NYT")
 RawClient.query_table(c, "delta_sharing", "default", "COVID_19_NYT", 10)
 
-r = Client.query_table(c, "delta_sharing", "default", "COVID_19_NYT", 10)
-[_protocol, _metadata, %{"file" => %{"url" => url}} | _] = r
-Tesla.get(url)
-
 Client.list_shares(c)
 Client.get_share(c, "delta_sharing")
 Client.list_schemas_in_share(c, "delta_sharing")
