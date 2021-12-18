@@ -40,11 +40,11 @@ defmodule DeltaSharing.MixProject do
   defp deps do
     [
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
-
       {:mint, "~> 1.4"},
       {:castore, "~> 0.1.14"},
       {:jason, "~> 1.2"},
-      {:tesla, "~> 1.4"}
+      {:tesla, "~> 1.4"},
+      {:ecto, "~> 3.7"}
     ]
   end
 
