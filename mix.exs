@@ -39,6 +39,8 @@ defmodule DeltaSharing.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
+      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
+
       {:mint, "~> 1.4"},
       {:castore, "~> 0.1.14"},
       {:jason, "~> 1.2"},
