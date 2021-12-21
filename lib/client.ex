@@ -1,22 +1,24 @@
 defmodule DeltaSharing.Client do
   alias DeltaSharing.{RawClient, Response}
 
-  def new(profile) do
+  def new(profile, adapter \\ {Tesla.Adapter.Mint, [recv_timeout: 30_000]}) do
     middleware = [
       {Tesla.Middleware.BaseUrl, profile.endpoint},
       Tesla.Middleware.JSON,
       {Tesla.Middleware.Headers, [{"Authorization", "Bearer " <> profile.bearerToken}]}
     ]
 
-    adapter = {Tesla.Adapter.Mint, [recv_timeout: 30_000]}
-
     Tesla.client(middleware, adapter)
   end
 
   defp with_ok(resp, fun) do
     case resp do
-      {:ok, env} ->
-        fun.(env)
+      {:ok, env = %{status: status}} ->
+        if status == 200 do
+          fun.(env)
+        else
+          {:error, %{reason: :bad_status, status: status}}
+        end
 
       error ->
         error
@@ -37,10 +39,20 @@ defmodule DeltaSharing.Client do
     end
   end
 
+  defp with_ok_and_map_body(resp, fun) do
+    with_ok_and_body(resp, fn body ->
+      if is_map(body) do
+        fun.(body)
+      else
+        {:error, %{reason: :bad_body, body: body}}
+      end
+    end)
+  end
+
   def list_shares(client, max_results \\ nil, page_token \\ nil) do
     resp = RawClient.list_shares(client, max_results, page_token)
 
-    with_ok_and_body(resp, fn body ->
+    with_ok_and_map_body(resp, fn body ->
       {:ok, Response.Shares.from_data(body)}
     end)
   end
@@ -48,7 +60,7 @@ defmodule DeltaSharing.Client do
   def get_share(client, share) do
     resp = RawClient.get_share(client, share)
 
-    with_ok_and_body(resp, fn body ->
+    with_ok_and_map_body(resp, fn body ->
       {:ok, Response.Shares.Share.from_data(Map.get(body, "share", %{}))}
     end)
   end
@@ -56,7 +68,7 @@ defmodule DeltaSharing.Client do
   def list_schemas_in_share(client, share, max_results \\ nil, page_token \\ nil) do
     resp = RawClient.list_schemas_in_share(client, share, max_results, page_token)
 
-    with_ok_and_body(resp, fn body ->
+    with_ok_and_map_body(resp, fn body ->
       {:ok, Response.Schemas.from_data(body)}
     end)
   end
@@ -64,7 +76,7 @@ defmodule DeltaSharing.Client do
   def list_tables_in_schemas(client, share, schema, max_results \\ nil, page_token \\ nil) do
     resp = RawClient.list_tables_in_schemas(client, share, schema, max_results, page_token)
 
-    with_ok_and_body(resp, fn body ->
+    with_ok_and_map_body(resp, fn body ->
       {:ok, Response.Tables.from_data(body)}
     end)
   end
@@ -72,7 +84,7 @@ defmodule DeltaSharing.Client do
   def list_all_tables_in_share(client, share, max_results \\ nil, page_token \\ nil) do
     resp = RawClient.list_all_tables_in_share(client, share, max_results, page_token)
 
-    with_ok_and_body(resp, fn body ->
+    with_ok_and_map_body(resp, fn body ->
       {:ok, Response.Tables.from_data(body)}
     end)
   end
