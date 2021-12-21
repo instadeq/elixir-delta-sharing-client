@@ -4,7 +4,7 @@ Elixir client library for the [Delta Sharing Protocol](https://github.com/delta-
 
 ## Status
 
-Early stages of development, already useful
+Implements the whole protocol as of [this version](https://github.com/delta-io/delta-sharing/blob/dab37674a10aa8f74dbe2b958197c6d0f0872650/PROTOCOL.md)
 
 ## Library Structure
 
