@@ -8,7 +8,7 @@ Early stages of development, already useful
 
 ## Library Structure
 
-There are two main modules: 
+There are two main modules:
 
 - `DeltaSharing.RawClient`: does the requests and returns the raw HTTP responses
 - `DeltaSharing.Client`: does the requests and parses the responses returning Elixir structs
