@@ -22,6 +22,7 @@ Download [open-datasets.share](https://databricks-datasets-oregon.s3-us-west-2.a
 alias DeltaSharing.{Profile, Client, RawClient}
 p = Profile.from_file("../open-datasets.share")
 c = Client.new(p)
+
 RawClient.list_shares(c)
 RawClient.get_share(c, "delta_sharing")
 RawClient.list_schemas_in_share(c, "delta_sharing")
@@ -35,7 +36,17 @@ Client.list_shares(c)
 Client.get_share(c, "delta_sharing")
 Client.list_schemas_in_share(c, "delta_sharing")
 Client.list_tables_in_schemas(c, "delta_sharing", "default")
+
+% pagination
+{:ok, r1} = Client.list_tables_in_schemas(c, "delta_sharing", "default", 5)
+Client.next(c, r1, 5)
+
 Client.list_all_tables_in_share(c, "delta_sharing")
+
+% pagination
+{:ok, r2} = Client.list_all_tables_in_share(c, "delta_sharing", 5)
+Client.next(c, r2, 5)
+
 Client.query_table_version(c, "delta_sharing", "default", "COVID_19_NYT")
 Client.query_table_metadata(c, "delta_sharing", "default", "COVID_19_NYT")
 Client.query_table(c, "delta_sharing", "default", "COVID_19_NYT", 10)
