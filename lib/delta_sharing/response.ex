@@ -69,12 +69,13 @@ defmodule DeltaSharing.Response do
 
     @primary_key false
     embedded_schema do
+      field(:share, :string, default: nil)
       field(:nextPageToken, :string, default: nil)
       embeds_many(:items, Schema)
     end
 
-    def from_data(data) do
-      %Schemas{}
+    def from_data(share, data) do
+      %Schemas{share: share}
       |> cast(data, [:nextPageToken])
       |> cast_embed(:items)
       |> apply_changes()
@@ -115,12 +116,14 @@ defmodule DeltaSharing.Response do
 
     @primary_key false
     embedded_schema do
+      field(:share, :string)
+      field(:schema, :string)
       field(:nextPageToken, :string, default: nil)
       embeds_many(:items, Table)
     end
 
-    def from_data(data) do
-      %Tables{}
+    def from_data(share, schema, data) do
+      %Tables{share: share, schema: schema}
       |> cast(data, [:nextPageToken])
       |> cast_embed(:items)
       |> apply_changes()

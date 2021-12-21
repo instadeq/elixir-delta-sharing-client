@@ -31,20 +31,22 @@ defmodule DeltaSharingTest do
     data = %{"items" => [%{"name" => "delta_sharing"}]}
 
     expected = %Schemas{
+      share: "share1",
       nextPageToken: nil,
       items: [%Schemas.Schema{id: nil, name: "delta_sharing"}]
     }
 
-    ^expected = Schemas.from_data(data)
+    ^expected = Schemas.from_data("share1", data)
 
     data1 = %{"nextPageToken" => "t1", "items" => [%{"name" => "delta_sharing"}]}
 
     expected1 = %Schemas{
+      share: "share1",
       nextPageToken: "t1",
       items: [%Schemas.Schema{id: nil, name: "delta_sharing"}]
     }
 
-    ^expected1 = Schemas.from_data(data1)
+    ^expected1 = Schemas.from_data("share1", data1)
   end
 
   test "Schema.from_data" do
@@ -75,6 +77,8 @@ defmodule DeltaSharingTest do
     }
 
     expected = %Tables{
+      share: "share1",
+      schema: "schema1",
       items: [
         %Tables.Table{
           id: "id1",
@@ -94,7 +98,7 @@ defmodule DeltaSharingTest do
       nextPageToken: nil
     }
 
-    ^expected = Tables.from_data(data)
+    ^expected = Tables.from_data("share1", "schema1", data)
   end
 
   test "Protocol.from_table_metadata_json" do

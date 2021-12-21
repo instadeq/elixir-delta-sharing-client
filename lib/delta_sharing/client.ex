@@ -69,7 +69,7 @@ defmodule DeltaSharing.Client do
     resp = RawClient.list_schemas_in_share(client, share, max_results, page_token)
 
     with_ok_and_map_body(resp, fn body ->
-      {:ok, Response.Schemas.from_data(body)}
+      {:ok, Response.Schemas.from_data(share, body)}
     end)
   end
 
@@ -77,7 +77,7 @@ defmodule DeltaSharing.Client do
     resp = RawClient.list_tables_in_schemas(client, share, schema, max_results, page_token)
 
     with_ok_and_map_body(resp, fn body ->
-      {:ok, Response.Tables.from_data(body)}
+      {:ok, Response.Tables.from_data(share, schema, body)}
     end)
   end
 
@@ -85,7 +85,7 @@ defmodule DeltaSharing.Client do
     resp = RawClient.list_all_tables_in_share(client, share, max_results, page_token)
 
     with_ok_and_map_body(resp, fn body ->
-      {:ok, Response.Tables.from_data(body)}
+      {:ok, Response.Tables.from_data(share, :all, body)}
     end)
   end
 
