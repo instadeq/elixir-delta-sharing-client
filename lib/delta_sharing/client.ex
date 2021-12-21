@@ -49,6 +49,28 @@ defmodule DeltaSharing.Client do
     end)
   end
 
+  def next(client, resp, max_results \\ nil) do
+    case resp do
+      %Response.Schemas{nextPageToken: nil} ->
+        {:ok, :done}
+
+      %Response.Tables{nextPageToken: nil} ->
+        {:ok, :done}
+
+      %Response.Schemas{share: share, nextPageToken: t} ->
+        list_schemas_in_share(client, share, max_results, t)
+
+      %Response.Tables{share: share, schema: :all, nextPageToken: t} ->
+        list_all_tables_in_share(client, share, max_results, t)
+
+      %Response.Tables{share: share, schema: schema, nextPageToken: t} ->
+        list_tables_in_schemas(client, share, schema, max_results, t)
+
+      _ ->
+        {:error, %{reason: :unknown_response, response: resp}}
+    end
+  end
+
   def list_shares(client, max_results \\ nil, page_token \\ nil) do
     resp = RawClient.list_shares(client, max_results, page_token)
 

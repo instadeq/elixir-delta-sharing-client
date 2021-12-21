@@ -1,6 +1,6 @@
 defmodule DeltaSharing.RawClientTest do
   use ExUnit.Case
-  alias DeltaSharing.{Profile, RawClient, Client}
+  alias DeltaSharing.{Profile, RawClient, Client, Response}
 
   defmodule FixedResponseAdapter do
     @behaviour Tesla.Adapter
@@ -129,5 +129,31 @@ defmodule DeltaSharing.RawClientTest do
     {:ok, %{status: 404, body: ""}} = RawClient.query_table(client, "share1", "schema1", "table1")
 
     {:error, %{reason: :bad_status}} = Client.query_table(client, "share1", "schema1", "table1")
+  end
+
+  test "next on response with no nextPageToken returns done" do
+    client = status_client(404, "")
+    {:ok, :done} = Client.next(client, Response.Schemas.from_data("share1", %{}))
+    {:ok, :done} = Client.next(client, Response.Tables.from_data("share1", :all, %{}))
+    {:ok, :done} = Client.next(client, Response.Tables.from_data("share1", "schema1", %{}))
+
+    {:error, %{reason: :unknown_response}} =
+      Client.next(client, Response.Tables.Table.from_data(%{}))
+  end
+
+  test "next on response with nextPageToken returns response" do
+    client = status_client(200, %{})
+
+    {:ok, %Response.Schemas{share: "share1", nextPageToken: nil, items: []}} =
+      Client.next(client, Response.Schemas.from_data("share1", %{"nextPageToken" => "t1"}))
+
+    {:ok, %Response.Tables{items: [], nextPageToken: nil, schema: :all, share: "share1"}} =
+      Client.next(client, Response.Tables.from_data("share1", :all, %{"nextPageToken" => "t1"}))
+
+    {:ok, %Response.Tables{items: [], nextPageToken: nil, schema: "schema1", share: "share1"}} =
+      Client.next(
+        client,
+        Response.Tables.from_data("share1", "schema1", %{"nextPageToken" => "t1"})
+      )
   end
 end
